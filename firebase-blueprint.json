@@ -1,0 +1,80 @@
+{
+  "entities": {
+    "User": {
+      "title": "User",
+      "description": "User profile and subscription data",
+      "type": "object",
+      "properties": {
+        "uid": { "type": "string" },
+        "email": { "type": "string" },
+        "displayName": { "type": "string" },
+        "isSubscribed": { "type": "boolean" },
+        "subscriptionExpiry": { "type": "string", "format": "date-time" }
+      },
+      "required": ["uid", "email"]
+    },
+    "Logo": {
+      "title": "Logo",
+      "description": "Generated logo data",
+      "type": "object",
+      "properties": {
+        "id": { "type": "string" },
+        "userId": { "type": "string" },
+        "prompt": { "type": "string" },
+        "imageUrl": { "type": "string" },
+        "createdAt": { "type": "string", "format": "date-time" },
+        "businessName": { "type": "string" },
+        "businessType": { "type": "string" }
+      },
+      "required": ["userId", "imageUrl", "createdAt"]
+    },
+    "ShowcaseItem": {
+      "title": "ShowcaseItem",
+      "description": "Items displayed in the public gallery",
+      "type": "object",
+      "properties": {
+        "id": { "type": "string" },
+        "logoId": { "type": "string" },
+        "userId": { "type": "string" },
+        "title": { "type": "string" },
+        "description": { "type": "string" },
+        "imageUrl": { "type": "string" },
+        "createdAt": { "type": "string", "format": "date-time" }
+      },
+      "required": ["logoId", "userId", "imageUrl"]
+    },
+    "Payment": {
+      "title": "Payment",
+      "description": "Payment records for Orange Money",
+      "type": "object",
+      "properties": {
+        "id": { "type": "string" },
+        "userId": { "type": "string" },
+        "amount": { "type": "number" },
+        "status": { "type": "string", "enum": ["pending", "completed", "failed"] },
+        "phoneNumber": { "type": "string" },
+        "transactionId": { "type": "string" },
+        "createdAt": { "type": "string", "format": "date-time" }
+      },
+      "required": ["userId", "amount", "status", "phoneNumber"]
+    }
+  },
+  "firestore": {
+    "/users/{userId}": {
+      "schema": "User",
+      "description": "User profiles"
+    },
+    "/logos/{logoId}": {
+      "schema": "Logo",
+      "description": "Generated logos"
+    },
+    "/showcase/{itemId}": {
+      "schema": "ShowcaseItem",
+      "description": "Public showcase items"
+    },
+    "/payments/{paymentId}": {
+      "schema": "Payment",
+      "description": "Payment history"
+    }
+  }
+}
