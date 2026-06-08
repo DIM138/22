@@ -1,0 +1,896 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Promote 2026 - Plateforme Vidéo Live</title>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Montserrat:wght@700;900&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    :root {
+      --primary: #6d28d9;
+      --primary-glow: rgba(109, 40, 217, 0.4);
+      --secondary: #ec4899;
+      --accent: #06b6d4;
+      --dark: #0f172a;
+      --dark-card: rgba(30, 41, 59, 0.75);
+      --light: #f8fafc;
+      --gradient: linear-gradient(135deg, #6d28d9, #ec4899, #06b6d4);
+      --glass: rgba(255, 255, 255, 0.05);
+      --glass-border: rgba(255, 255, 255, 0.1);
+    }
+    body {
+      font-family: 'Inter', sans-serif;
+      background: var(--dark);
+      color: var(--light);
+      min-height: 100vh;
+      overflow-x: hidden;
+      position: relative;
+    }
+    body::before {
+      content: '';
+      position: fixed;
+      top: 0; left: 0; width: 100%; height: 100%;
+      background: radial-gradient(circle at 20% 50%, rgba(109,40,217,0.25), transparent 40%),
+                  radial-gradient(circle at 80% 20%, rgba(236,72,153,0.2), transparent 40%),
+                  radial-gradient(circle at 50% 80%, rgba(6,182,212,0.2), transparent 50%);
+      background-size: 200% 200%;
+      animation: aurora 20s ease infinite;
+      z-index: -2;
+    }
+    @keyframes aurora {
+      0% { background-position: 0% 50%; }
+      50% { background-position: 100% 50%; }
+      100% { background-position: 0% 50%; }
+    }
+    body::after {
+      content: '';
+      position: fixed;
+      top: 0; left: 0; width: 100%; height: 100%;
+      background-image: url("data:image/svg+xml,%3Csvg width='60' height='60' viewBox='0 0 60 60' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='none' fill-rule='evenodd'%3E%3Cg fill='%23ffffff' fill-opacity='0.03'%3E%3Cpath d='M36 34v-4h-2v4h-4v2h4v4h2v-4h4v-2h-4zm0-30V0h-2v4h-4v2h4v4h2V6h4V4h-4zM6 34v-4H4v4H0v2h4v4h2v-4h4v-2H6zM6 4V0H4v4H0v2h4v4h2V6h4V4H6z'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E");
+      z-index: -1;
+      opacity: 1;
+    }
+    #particles {
+      position: fixed;
+      top: 0; left: 0; width: 100%; height: 100%;
+      z-index: -1;
+      pointer-events: none;
+    }
+    canvas { display: block; }
+    .header {
+      position: fixed;
+      top: 0; left: 0; right: 0;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 1rem 2rem;
+      backdrop-filter: blur(20px);
+      background: rgba(15, 23, 42, 0.5);
+      border-bottom: 1px solid var(--glass-border);
+      z-index: 100;
+    }
+    .logo {
+      font-family: 'Montserrat', sans-serif;
+      font-weight: 900;
+      font-size: 1.5rem;
+      background: var(--gradient);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      letter-spacing: -1px;
+    }
+    .logo i { color: var(--secondary); margin-right: 0.5rem; -webkit-text-fill-color: initial; }
+    .event-dates {
+      font-weight: 500;
+      color: rgba(255,255,255,0.7);
+      font-size: 0.95rem;
+    }
+    .btn-ghost {
+      background: transparent;
+      border: 1px solid rgba(255,255,255,0.2);
+      color: var(--light);
+      padding: 0.5rem 1rem;
+      border-radius: 8px;
+      cursor: pointer;
+      font-weight: 500;
+      transition: all 0.2s;
+      text-decoration: none;
+      font-family: 'Inter', sans-serif;
+    }
+    .btn-ghost:hover { background: rgba(255,255,255,0.1); }
+    .main { padding-top: 80px; min-height: 100vh; display: flex; flex-direction: column; align-items: center; }
+    .section {
+      width: 100%;
+      max-width: 1200px;
+      padding: 2rem;
+      animation: fadeIn 0.6s ease;
+    }
+    .section.hidden { display: none; }
+    @keyframes fadeIn { from { opacity: 0; transform: translateY(20px); } to { opacity: 1; transform: translateY(0); } }
+    /* HOME */
+    #home { text-align: center; justify-content: center; display: flex; flex-direction: column; align-items: center; min-height: calc(100vh - 80px); }
+    .hero {
+      background: var(--glass);
+      backdrop-filter: blur(24px);
+      border-radius: 32px;
+      border: 1px solid var(--glass-border);
+      padding: 3rem 2rem;
+      max-width: 800px;
+      box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.5);
+    }
+    .hero h1 {
+      font-family: 'Montserrat', sans-serif;
+      font-size: 3rem;
+      font-weight: 900;
+      line-height: 1.2;
+      margin-bottom: 1rem;
+    }
+    .gradient-text {
+      background: var(--gradient);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+    }
+    .hero p {
+      font-size: 1.1rem;
+      color: rgba(255,255,255,0.8);
+      line-height: 1.6;
+      margin-bottom: 2rem;
+      max-width: 600px;
+      margin-left: auto; margin-right: auto;
+    }
+    .note {
+      margin-top: 1.5rem;
+      font-size: 0.85rem;
+      color: rgba(255,255,255,0.5);
+    }
+    .countdown {
+      display: flex;
+      justify-content: center;
+      gap: 1.5rem;
+      margin-bottom: 2.5rem;
+      flex-wrap: wrap;
+    }
+    .countdown-item {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      background: rgba(0,0,0,0.3);
+      padding: 1rem 1.5rem;
+      border-radius: 16px;
+      min-width: 80px;
+      border: 1px solid rgba(255,255,255,0.1);
+    }
+    .countdown-item span {
+      font-family: 'Montserrat', sans-serif;
+      font-size: 2rem;
+      font-weight: 700;
+      line-height: 1;
+    }
+    .countdown-item label {
+      font-size: 0.75rem;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+      color: rgba(255,255,255,0.6);
+      margin-top: 0.5rem;
+    }
+    .actions {
+      display: flex;
+      gap: 1rem;
+      justify-content: center;
+      flex-wrap: wrap;
+    }
+    /* BUTTONS */
+    .btn {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.6rem;
+      padding: 0.85rem 1.6rem;
+      border-radius: 12px;
+      font-weight: 600;
+      font-size: 1rem;
+      cursor: pointer;
+      border: none;
+      transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+      font-family: 'Inter', sans-serif;
+      position: relative;
+      overflow: hidden;
+    }
+    .btn:active { transform: scale(0.96); }
+    .btn-primary {
+      background: var(--gradient);
+      color: white;
+      box-shadow: 0 10px 25px var(--primary-glow);
+    }
+    .btn-primary:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 15px 35px var(--primary-glow);
+    }
+    .btn-secondary {
+      background: rgba(255,255,255,0.1);
+      color: white;
+      border: 1px solid var(--glass-border);
+    }
+    .btn-secondary:hover {
+      background: rgba(255,255,255,0.2);
+      transform: translateY(-2px);
+    }
+    .btn-danger {
+      background: #dc2626;
+      color: white;
+      box-shadow: 0 8px 20px rgba(220, 38, 38, 0.3);
+    }
+    .btn-danger:hover { background: #ef4444; }
+    .btn-dark {
+      background: rgba(0,0,0,0.4);
+      color: white;
+      border: 1px solid rgba(255,255,255,0.1);
+    }
+    .btn-dark:hover { background: rgba(0,0,0,0.6); }
+    .btn-large { padding: 1rem 2.5rem; font-size: 1.1rem; border-radius: 20px; }
+    .btn-small { padding: 0.5rem 0.8rem; font-size: 0.85rem; border-radius: 8px; }
+    /* STREAMING UI */
+    .stream-container {
+      display: flex;
+      flex-direction: column;
+      gap: 1.5rem;
+      max-width: 1000px;
+      margin: 0 auto;
+      width: 100%;
+    }
+    .video-wrapper {
+      position: relative;
+      border-radius: 24px;
+      overflow: hidden;
+      background: #000;
+      box-shadow: 0 30px 60px -15px rgba(0, 0, 0, 0.6);
+      border: 1px solid rgba(255,255,255,0.1);
+      aspect-ratio: 16/9;
+    }
+    video {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      display: block;
+    }
+    .stream-badge {
+      position: absolute;
+      top: 1rem; left: 1rem;
+      background: rgba(0,0,0,0.7);
+      color: white;
+      padding: 0.4rem 0.8rem;
+      border-radius: 8px;
+      font-size: 0.8rem;
+      font-weight: 600;
+      display: flex;
+      align-items: center;
+      gap: 0.4rem;
+      backdrop-filter: blur(10px);
+    }
+    .stream-badge.live i { color: #ef4444; animation: blink 1.5s infinite; }
+    @keyframes blink { 0%,100% { opacity: 1; } 50% { opacity: 0.4; } }
+    .viewer-count {
+      position: absolute;
+      top: 1rem; right: 1rem;
+      background: rgba(0,0,0,0.7);
+      color: white;
+      padding: 0.4rem 0.8rem;
+      border-radius: 8px;
+      font-size: 0.85rem;
+      display: flex;
+      align-items: center;
+      gap: 0.4rem;
+      backdrop-filter: blur(10px);
+    }
+    .stream-info {
+      background: var(--glass);
+      backdrop-filter: blur(20px);
+      border-radius: 20px;
+      padding: 1.5rem;
+      border: 1px solid var(--glass-border);
+      display: flex;
+      flex-wrap: wrap;
+      gap: 1rem;
+      align-items: center;
+      justify-content: space-between;
+    }
+    .room-id-box {
+      display: flex;
+      flex-direction: column;
+      gap: 0.3rem;
+      background: rgba(0,0,0,0.3);
+      padding: 0.8rem 1.2rem;
+      border-radius: 12px;
+    }
+    .room-id-box strong {
+      font-family: 'Montserrat', sans-serif;
+      font-size: 1.4rem;
+      color: var(--accent);
+      letter-spacing: 2px;
+    }
+    .controls { display: flex; gap: 0.8rem; flex-wrap: wrap; }
+    .recordings-list {
+      width: 100%;
+      display: flex;
+      flex-direction: column;
+      gap: 0.5rem;
+      margin-top: 0.5rem;
+    }
+    .recording-item {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      background: rgba(0,0,0,0.2);
+      padding: 0.6rem 1rem;
+      border-radius: 10px;
+      font-size: 0.9rem;
+    }
+    .recording-item a { color: var(--accent); text-decoration: none; }
+    .recording-item a:hover { text-decoration: underline; }
+    .toast-container {
+      position: fixed;
+      bottom: 2rem; right: 2rem;
+      z-index: 1000;
+      display: flex;
+      flex-direction: column;
+      gap: 0.5rem;
+    }
+    .toast {
+      background: rgba(30,41,59,0.95);
+      border-left: 4px solid var(--accent);
+      color: white;
+      padding: 0.8rem 1.5rem;
+      border-radius: 10px;
+      box-shadow: 0 10px 30px rgba(0,0,0,0.4);
+      backdrop-filter: blur(10px);
+      animation: slideIn 0.4s ease;
+      font-weight: 500;
+    }
+    .toast.error { border-left-color: #ef4444; }
+    @keyframes slideIn { from { transform: translateX(100%); opacity: 0; } to { transform: translateX(0); opacity: 1; } }
+    .hidden { display: none !important; }
+    @media (max-width: 768px) {
+      .header { padding: 0.8rem 1rem; }
+      .logo { font-size: 1.2rem; }
+      .hero h1 { font-size: 2rem; }
+      .hero { padding: 2rem 1.5rem; }
+      .btn-large { padding: 0.8rem 1.2rem; font-size: 1rem; }
+      .stream-info { flex-direction: column; align-items: stretch; }
+      .controls { justify-content: center; }
+    }
+  </style>
+</head>
+<body>
+  <canvas id="particles"></canvas>
+  <header class="header">
+    <div class="logo"><i class="fas fa-video"></i>PROMOTE 2026</div>
+    <div class="event-dates">12 - 21 Juin 2026</div>
+    <button id="back-home-btn" class="btn btn-ghost hidden"><i class="fas fa-arrow-left"></i> Accueil</button>
+  </header>
+  <main class="main">
+    <!-- HOME SECTION -->
+    <section id="home" class="section">
+      <div class="hero">
+        <h1>Plateforme Vidéo Live pour <br><span class="gradient-text">Promote 2026</span></h1>
+        <p>Diffusez votre événement en direct, partagez le lien unique et capturez l'instant. La plateforme idéale pour Promote 2026 du 12 au 21 juin 2026.</p>
+        <div class="countdown">
+          <div class="countdown-item"><span id="days">00</span><label>Jours</label></div>
+          <div class="countdown-item"><span id="hours">00</span><label>Heures</label></div>
+          <div class="countdown-item"><span id="minutes">00</span><label>Min</label></div>
+          <div class="countdown-item"><span id="seconds">00</span><label>Sec</label></div>
+        </div>
+        <div class="actions">
+          <button id="btn-broadcast" class="btn btn-primary btn-large">
+            <i class="fas fa-broadcast-tower"></i> Je veux diffuser
+          </button>
+          <button id="btn-join" class="btn btn-secondary btn-large">
+            <i class="fas fa-play-circle"></i> Je veux regarder
+          </button>
+        </div>
+        <p class="note"><i class="fas fa-mobile-alt"></i> Ouvrez le lien partagé sur votre téléphone pour filmer, et regardez en direct ici.</p>
+      </div>
+    </section>
+
+    <!-- BROADCASTER SECTION -->
+    <section id="broadcaster" class="section hidden">
+      <div class="stream-container">
+        <div class="video-wrapper">
+          <video id="local-video" autoplay playsinline muted></video>
+          <div class="stream-badge live"><i class="fas fa-circle"></i> LIVE</div>
+          <div class="viewer-count"><i class="fas fa-user"></i> <span id="viewer-count">1</span></div>
+        </div>
+        <div class="stream-info">
+          <div class="room-id-box">
+            <span>ID de flux: <strong id="room-id-display">---</strong></span>
+            <button id="copy-link-btn" class="btn btn-small btn-primary"><i class="fas fa-copy"></i> Copier le lien</button>
+          </div>
+          <div class="controls">
+            <button id="btn-record" class="btn btn-danger"><i class="fas fa-record-vinyl"></i> Démarrer enregistrement</button>
+            <button id="btn-stop-stream" class="btn btn-dark"><i class="fas fa-stop"></i> Arrêter le flux</button>
+          </div>
+          <div class="recordings-list" id="broadcaster-recordings"></div>
+        </div>
+      </div>
+    </section>
+
+    <!-- VIEWER SECTION -->
+    <section id="viewer" class="section hidden">
+      <div class="stream-container">
+        <div class="video-wrapper">
+          <video id="remote-video" autoplay playsinline></video>
+          <div id="viewer-status" class="stream-badge"><i class="fas fa-spinner fa-spin"></i> Connexion en cours...</div>
+          <div class="viewer-count"><i class="fas fa-user"></i> <span id="viewer-count-text">1</span></div>
+        </div>
+        <div class="stream-info">
+          <div class="controls">
+            <button id="btn-viewer-record" class="btn btn-danger"><i class="fas fa-record-vinyl"></i> Démarrer enregistrement</button>
+            <button id="btn-leave" class="btn btn-dark"><i class="fas fa-arrow-left"></i> Quitter le flux</button>
+          </div>
+          <div class="recordings-list" id="viewer-recordings"></div>
+        </div>
+      </div>
+    </section>
+  </main>
+  <div id="toast-container" class="toast-container"></div>
+
+  <script>
+    (function() {
+      // ============ UTILITIES ============
+      const $ = (id) => document.getElementById(id);
+      const show = (el) => el && el.classList.remove('hidden');
+      const hide = (el) => el && el.classList.add('hidden');
+      
+      function showToast(message, type = 'success') {
+        const container = $('toast-container');
+        const toast = document.createElement('div');
+        toast.className = `toast ${type === 'error' ? 'error' : ''}`;
+        toast.textContent = message;
+        container.appendChild(toast);
+        setTimeout(() => toast.remove(), 4000);
+      }
+
+      // ============ SIGNALING VIA BROADCASTCHANNEL ============
+      class Signaling {
+        constructor(roomId, onMessage) {
+          if (!('BroadcastChannel' in window)) throw new Error("BroadcastChannel non supporté par votre navigateur.");
+          this.channelName = `promote2026-${roomId}`;
+          this.channel = new BroadcastChannel(this.channelName);
+          this.channel.onmessage = (event) => onMessage(event.data);
+        }
+        send(message) {
+          this.channel.postMessage({ ...message, timestamp: Date.now() });
+        }
+        close() {
+          try { this.channel.close(); } catch (e) {}
+        }
+      }
+
+      // ============ APP STATE ============
+      const state = {
+        role: 'home', // 'home', 'broadcaster', 'viewer'
+        roomId: null,
+        localStream: null,
+        remoteStream: null,
+        peerConnection: null,
+        signaling: null,
+        mediaRecorder: null,
+        recordedChunks: [],
+        recordingInterval: null,
+        streamStartTime: null,
+        recordingStartTime: null
+      };
+
+      // ============ DOM ELEMENTS ============
+      const el = {
+        sections: {
+          home: $('home'),
+          broadcaster: $('broadcaster'),
+          viewer: $('viewer')
+        },
+        buttons: {
+          broadcast: $('btn-broadcast'),
+          join: $('btn-join'),
+          record: $('btn-record'),
+          stopStream: $('btn-stop-stream'),
+          copyLink: $('copy-link-btn'),
+          viewerRecord: $('btn-viewer-record'),
+          leave: $('btn-leave'),
+          backHome: $('back-home-btn')
+        },
+        displays: {
+          roomId: $('room-id-display'),
+          viewerCount: $('viewer-count'),
+          viewerStatus: $('viewer-status'),
+          broadcasterRecordings: $('broadcaster-recordings'),
+          viewerRecordings: $('viewer-recordings')
+        },
+        videos: {
+          local: $('local-video'),
+          remote: $('remote-video')
+        }
+      };
+
+      // ============ INITIALIZATION ============
+      function showSection(name) {
+        Object.values(el.sections).forEach(s => hide(s));
+        if (el.sections[name]) show(el.sections[name]);
+      }
+      
+      function initCountdown() {
+        const eventDate = new Date('2026-06-12T00:00:00');
+        function update() {
+          const now = new Date();
+          const diff = eventDate - now;
+          if (diff <= 0) {
+            $('days').textContent = '00';
+            $('hours').textContent = '00';
+            $('minutes').textContent = '00';
+            $('seconds').textContent = '00';
+            return;
+          }
+          const d = Math.floor(diff / (1000 * 60 * 60 * 24));
+          const h = Math.floor((diff % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+          const m = Math.floor((diff % (1000 * 60 * 60)) / (1000 * 60));
+          const s = Math.floor((diff % (1000 * 60)) / 1000);
+          $('days').textContent = d.toString().padStart(2, '0');
+          $('hours').textContent = h.toString().padStart(2, '0');
+          $('minutes').textContent = m.toString().padStart(2, '0');
+          $('seconds').textContent = s.toString().padStart(2, '0');
+        }
+        update();
+        setInterval(update, 1000);
+      }
+
+      function initParticles() {
+        const canvas = $('particles');
+        const ctx = canvas.getContext('2d');
+        let width, height, particles = [];
+        function resize() {
+          width = canvas.width = window.innerWidth;
+          height = canvas.height = window.innerHeight;
+        }
+        resize();
+        window.addEventListener('resize', resize);
+        for (let i = 0; i < 60; i++) {
+          particles.push({
+            x: Math.random() * width,
+            y: Math.random() * height,
+            vx: (Math.random() - 0.5) * 0.8,
+            vy: (Math.random() - 0.5) * 0.8,
+            size: Math.random() * 3 + 1,
+            opacity: Math.random() * 0.5 + 0.2
+          });
+        }
+        function animate() {
+          ctx.clearRect(0, 0, width, height);
+          ctx.fillStyle = 'rgba(255,255,255,0.8)';
+          particles.forEach(p => {
+            p.x += p.vx;
+            p.y += p.vy;
+            if (p.x < 0) p.x = width;
+            if (p.x > width) p.x = 0;
+            if (p.y < 0) p.y = height;
+            if (p.y > height) p.y = 0;
+            ctx.globalAlpha = p.opacity;
+            ctx.beginPath();
+            ctx.arc(p.x, p.y, p.size, 0, Math.PI * 2);
+            ctx.fill();
+          });
+          ctx.globalAlpha = 1;
+          requestAnimationFrame(animate);
+        }
+        animate();
+      }
+
+      // ============ WEBRTC & STREAMING ============
+      function setupPeerConnection(addLocalStream = false) {
+        const config = { iceServers: [{ urls: 'stun:stun.l.google.com:19302' }] };
+        state.peerConnection = new RTCPeerConnection(config);
+
+        if (addLocalStream && state.localStream) {
+          state.localStream.getTracks().forEach(track => state.peerConnection.addTrack(track, state.localStream));
+        }
+
+        state.peerConnection.onicecandidate = (event) => {
+          if (event.candidate && state.signaling) {
+            state.signaling.send({ type: 'ice-candidate', candidate: event.candidate });
+          }
+        };
+
+        state.peerConnection.ontrack = (event) => {
+          if (state.role === 'viewer') {
+            state.remoteStream = event.streams[0];
+            el.videos.remote.srcObject = state.remoteStream;
+            el.displays.viewerStatus.innerHTML = '<i class="fas fa-circle"></i> EN DIRECT';
+          } else if (state.role === 'broadcaster') {
+            // The broadcaster also gets a view of the remote stream (for multi-view? not used)
+            state.remoteStream = event.streams[0];
+          }
+        };
+
+        state.peerConnection.onconnectionstatechange = () => {
+          console.log('Connection state:', state.peerConnection.connectionState);
+        };
+      }
+
+      // ============ BROADCASTER LOGIC ============
+      async function startBroadcaster() {
+        try {
+          const stream = await navigator.mediaDevices.getUserMedia({ 
+            video: { facingMode: 'environment', width: 1280, height: 720 }, 
+            audio: true 
+          });
+          state.localStream = stream;
+          state.role = 'broadcaster';
+          state.roomId = Math.random().toString(36).substring(2, 11);
+          el.videos.local.srcObject = stream;
+          el.displays.roomId.textContent = state.roomId;
+          state.signaling = new Signaling(state.roomId, handleBroadcasterMessage);
+          setupPeerConnection(true);
+          showSection('broadcaster');
+          show(el.buttons.backHome);
+          
+          // Share link
+          const shareUrl = `${location.origin}${location.pathname}?room=${state.roomId}`;
+          state.shareUrl = shareUrl;
+          
+          // Update viewer count periodically (simulate 1 viewer)
+          setInterval(() => {
+            const count = parseInt(el.displays.viewerCount.textContent) + (Math.random() > 0.7 ? 1 : 0);
+            el.displays.viewerCount.textContent = Math.min(count, 10);
+          }, 5000);
+
+          showToast('Flux créé ! Partagez le lien avec votre audience.');
+        } catch (err) {
+          console.error(err);
+          showToast('Impossible d\'accéder à la caméra/micro. Assurez-vous d\'autoriser les permissions.', 'error');
+        }
+      }
+
+      async function handleBroadcasterMessage(data) {
+        switch (data.type) {
+          case 'join':
+            // Viewer joined - create offer
+            try {
+              const offer = await state.peerConnection.createOffer();
+              await state.peerConnection.setLocalDescription(offer);
+              state.signaling.send({ type: 'offer', sdp: offer });
+              // Simulate viewer count increment
+              const count = parseInt(el.displays.viewerCount.textContent) + 1;
+              el.displays.viewerCount.textContent = count;
+            } catch (err) {
+              console.error('Offer creation error:', err);
+            }
+            break;
+          case 'answer':
+            await state.peerConnection.setRemoteDescription(new RTCSessionDescription(data.sdp));
+            break;
+          case 'ice-candidate':
+            try {
+              await state.peerConnection.addIceCandidate(new RTCIceCandidate(data.candidate));
+            } catch (err) { console.error(err); }
+            break;
+          case 'leave':
+            const c = parseInt(el.displays.viewerCount.textContent) - 1;
+            el.displays.viewerCount.textContent = Math.max(1, c);
+            break;
+        }
+      }
+
+      function stopBroadcaster() {
+        if (state.localStream) state.localStream.getTracks().forEach(t => t.stop());
+        if (state.peerConnection) state.peerConnection.close();
+        if (state.signaling) state.signaling.send({ type: 'close' });
+        if (state.signaling) state.signaling.close();
+        state.localStream = null;
+        state.peerConnection = null;
+        state.role = 'home';
+        hide(el.buttons.backHome);
+        showSection('home');
+        window.history.replaceState({}, '', location.pathname);
+      }
+
+      function copyShareLink() {
+        const url = state.shareUrl || `${location.origin}${location.pathname}?room=${state.roomId}`;
+        navigator.clipboard.writeText(url).then(() => {
+          showToast('Lien copié dans le presse-papier !');
+        }).catch(() => {
+          showToast('Impossible de copier le lien.', 'error');
+        });
+      }
+
+      // ============ VIEWER LOGIC ============
+      function joinAsViewer(roomInput) {
+        let roomId = roomInput;
+        try {
+          if (roomInput.includes('room=')) {
+            const urlPart = roomInput.includes('?') ? roomInput.split('?')[1] : roomInput;
+            roomId = new URLSearchParams(urlPart).get('room');
+          }
+        } catch (e) {}
+        if (!roomId) {
+          showToast('ID de flux invalide.', 'error');
+          return;
+        }
+        state.role = 'viewer';
+        state.roomId = roomId;
+        state.signaling = new Signaling(roomId, handleViewerMessage);
+        setupPeerConnection(false);
+        showSection('viewer');
+        show(el.buttons.backHome);
+        state.signaling.send({ type: 'join', viewerId: 'viewer_' + Date.now() });
+        // Update history
+        history.replaceState({}, '', `?room=${roomId}`);
+      }
+
+      async function handleViewerMessage(data) {
+        switch (data.type) {
+          case 'offer':
+            try {
+              await state.peerConnection.setRemoteDescription(new RTCSessionDescription(data.sdp));
+              const answer = await state.peerConnection.createAnswer();
+              await state.peerConnection.setLocalDescription(answer);
+              state.signaling.send({ type: 'answer', sdp: answer });
+              el.displays.viewerStatus.innerHTML = '<i class="fas fa-circle"></i> CONNEXION...';
+            } catch (err) {
+              console.error('Answer error:', err);
+              showToast('Erreur lors de la connexion au flux.', 'error');
+            }
+            break;
+          case 'ice-candidate':
+            try {
+              await state.peerConnection.addIceCandidate(new RTCIceCandidate(data.candidate));
+            } catch (err) { console.error(err); }
+            break;
+          case 'close':
+            el.displays.viewerStatus.innerHTML = '<i class="fas fa-times"></i> FLUX TERMINÉ';
+            showToast('Le diffuseur a arrêté le flux.');
+            break;
+        }
+      }
+
+      function leaveViewer() {
+        if (state.peerConnection) state.peerConnection.close();
+        if (state.signaling) state.signaling.close();
+        state.role = 'home';
+        state.roomId = null;
+        hide(el.buttons.backHome);
+        showSection('home');
+        window.history.replaceState({}, '', location.pathname);
+      }
+
+      // ============ RECORDING ============
+      function startRecording(stream, listContainerId) {
+        if (!MediaRecorder.isTypeSupported('video/webm; codecs=vp9')) {
+          showToast('Enregistrement non supporté sur ce navigateur. Essayez Chrome.', 'error');
+          return;
+        }
+        state.recordedChunks = [];
+        state.mediaRecorder = new MediaRecorder(stream, { mimeType: 'video/webm; codecs=vp9' });
+        state.recordingStartTime = Date.now();
+
+        state.mediaRecorder.ondataavailable = (e) => {
+          if (e.data.size > 0) state.recordedChunks.push(e.data);
+        };
+        state.mediaRecorder.onstop = () => {
+          const blob = new Blob(state.recordedChunks, { type: 'video/webm' });
+          const url = URL.createObjectURL(blob);
+          const timestamp = new Date().toLocaleString('fr-FR');
+          addRecordingToList(url, timestamp, listContainerId);
+          showToast('Enregistrement sauvegardé.');
+        };
+        state.mediaRecorder.start();
+        showToast('Enregistrement démarré...');
+      }
+
+      function stopRecording() {
+        if (state.mediaRecorder && state.mediaRecorder.state !== 'inactive') {
+          state.mediaRecorder.stop();
+        }
+      }
+
+      function addRecordingToList(url, timestamp, containerId) {
+        const container = $(containerId);
+        const item = document.createElement('div');
+        item.className = 'recording-item';
+        item.innerHTML = `
+          <span><i class="fas fa-film"></i> ${timestamp}</span>
+          <a href="${url}" download="promote2026_${Date.now()}.webm">Télécharger <i class="fas fa-download"></i></a>
+        `;
+        container.appendChild(item);
+      }
+
+      // ============ EVENT LISTENERS SETUP ============
+      function setupEventListeners() {
+        // Navigation
+        el.buttons.broadcast.addEventListener('click', startBroadcaster);
+        el.buttons.join.addEventListener('click', () => {
+          const roomInput = prompt('Entrez l\'ID du flux ou collez le lien partagé:');
+          if (roomInput) joinAsViewer(roomInput);
+        });
+        
+        // Broadcaster controls
+        el.buttons.copyLink.addEventListener('click', copyShareLink);
+        el.buttons.stopStream.addEventListener('click', stopBroadcaster);
+        el.buttons.record.addEventListener('click', () => {
+          if (state.mediaRecorder && state.mediaRecorder.state === 'recording') {
+            stopRecording();
+            el.buttons.record.innerHTML = '<i class="fas fa-record-vinyl"></i> Enregistrer';
+          } else {
+            startRecording(state.localStream, 'broadcaster-recordings');
+            el.buttons.record.innerHTML = '<i class="fas fa-stop-circle"></i> Arrêter enregistrement';
+            // Auto-stop after 5 min max to avoid memory issues
+            setTimeout(() => {
+              if (state.mediaRecorder && state.mediaRecorder.state === 'recording') {
+                stopRecording();
+                el.buttons.record.innerHTML = '<i class="fas fa-record-vinyl"></i> Enregistrer';
+                showToast('Enregistrement automatiquement arrêté (max 5min).');
+              }
+            }, 5 * 60 * 1000);
+          }
+        });
+
+        // Viewer controls
+        el.buttons.viewerRecord.addEventListener('click', () => {
+          if (state.mediaRecorder && state.mediaRecorder.state === 'recording') {
+            stopRecording();
+            el.buttons.viewerRecord.innerHTML = '<i class="fas fa-record-vinyl"></i> Enregistrer';
+          } else if (state.remoteStream) {
+            startRecording(state.remoteStream, 'viewer-recordings');
+            el.buttons.viewerRecord.innerHTML = '<i class="fas fa-stop-circle"></i> Arrêter enregistrement';
+            setTimeout(() => {
+              if (state.mediaRecorder && state.mediaRecorder.state === 'recording') {
+                stopRecording();
+                el.buttons.viewerRecord.innerHTML = '<i class="fas fa-record-vinyl"></i> Enregistrer';
+                showToast('Enregistrement auto arrêté (max 5min).');
+              }
+            }, 5 * 60 * 1000);
+          } else {
+            showToast('Aucun flux distant disponible.', 'error');
+          }
+        });
+        el.buttons.leave.addEventListener('click', leaveViewer);
+        
+        // Back to home
+        el.buttons.backHome.addEventListener('click', () => {
+          if (state.role === 'broadcaster') stopBroadcaster();
+          else if (state.role === 'viewer') leaveViewer();
+        });
+      }
+
+      // ============ STARTUP ============
+      function startup() {
+        initCountdown();
+        initParticles();
+        setupEventListeners();
+        
+        // Check URL for direct viewer join
+        const params = new URLSearchParams(window.location.search);
+        const room = params.get('room');
+        if (room) {
+          joinAsViewer(room);
+        } else {
+          showSection('home');
+        }
+      }
+
+      // Handle page unload
+      window.addEventListener('beforeunload', () => {
+        if (state.role === 'broadcaster' && state.signaling) {
+          state.signaling.send({ type: 'close' });
+        }
+        if (state.localStream) state.localStream.getTracks().forEach(t => t.stop());
+        if (state.peerConnection) state.peerConnection.close();
+        if (state.signaling) state.signaling.close();
+      });
+
+      // Boot
+      if (document.readyState === 'loading') {
+        document.addEventListener('DOMContentLoaded', startup);
+      } else {
+        startup();
+      }
+    })();
+  </script>
+</body>
+</html>
